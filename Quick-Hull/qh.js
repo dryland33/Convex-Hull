@@ -82,20 +82,21 @@ function getConvexHull(points) {
                        buildConvexHull([maxPt, minPt], points))
     return ch;
 }
-function getRandomPoints(numPoint, xMax, yMax) {
+function getRandomPoints(numPoints) {
+	
     var points = new Array();
-    var phase = Math.random() * Math.PI * 2;
-    for (var i = 0; i < numPoint/2; i++) {
-        var r =  Math.random()*xMax/4;
-        var theta = Math.random() * 1.5 * Math.PI + phase;
-        points.push( [ xMax /4 + r * Math.cos(theta), yMax/2 + 2 * r * Math.sin(theta) ] )
+	var radius = 300;
+	
+    for (var i = 0; i < numPoints; i++) {
+		x = Math.random() * 2 * radius - radius;
+		ylim = Math.sqrt(radius * radius - x * x);
+		y = Math.random() * 2 * ylim - ylim;
+		
+		x += radius;
+		y += radius;	
+        points.push( [x, y] );
     }
-    var phase = Math.random() * Math.PI * 2;
-    for (var i = 0; i < numPoint/2; i++) {
-        var r =  Math.random()*xMax/4;
-        var theta = Math.random() * 1.5 * Math.PI + phase;
-        points.push( [ xMax /4 * 3 +  r * Math.cos(theta), yMax/2 +  r * Math.sin(theta) ] )
-    }
+    
     return points
 }
 
@@ -119,9 +120,9 @@ var pts;
 
 function qhPlotPoints() {
     ctx = document.getElementById('qh_demo').getContext('2d');
-    ctx.clearRect(0,0,200,200);
+    ctx.clearRect(0,0,650,650);
     ctx.fillStyle = 'rgb(0,0,0)';
-    pts = getRandomPoints(250,200,200);
+    pts = getRandomPoints(500);
     for (var idx in pts) {
         var pt = pts[idx];
         ctx.fillRect(pt[0],pt[1],2,2);
