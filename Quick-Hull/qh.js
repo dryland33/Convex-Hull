@@ -19,7 +19,6 @@ function getDistant(cpt, bl) {
     return (Vx * (cpt[0] - bl[0][0]) + Vy * (cpt[1] -bl[0][1]))
 }
 
-
 function findMostDistantPointFromBaseLine(baseLine, points) {
     var maxD = 0;
     var maxPt = new Array();
@@ -63,6 +62,7 @@ function buildConvexHull(baseLine, points) {
         return [baseLine];
     }    
 }
+
 function getConvexHull(points) {
     //find first baseline
     var maxX, minX;
@@ -82,6 +82,7 @@ function getConvexHull(points) {
                        buildConvexHull([maxPt, minPt], points))
     return ch;
 }
+
 function getRandomPoints(numPoints) {
 	
     var points = new Array();
@@ -100,7 +101,6 @@ function getRandomPoints(numPoints) {
     return points
 }
 
-
 function plotBaseLine(baseLine,color) {
     var ctx = document.getElementById('qh_demo').getContext('2d');
     var pt1 = baseLine[0]
@@ -114,8 +114,6 @@ function plotBaseLine(baseLine,color) {
     ctx.restore();
 }   
 
-
-
 var pts;
 
 function qhPlotPoints() {
@@ -128,8 +126,6 @@ function qhPlotPoints() {
         ctx.fillRect(pt[0],pt[1],2,2);
     }
 }
-
-
 
 function qhPlotConvexHull() {
     var ch = getConvexHull(pts);
