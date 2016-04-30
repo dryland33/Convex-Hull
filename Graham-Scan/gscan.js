@@ -49,7 +49,6 @@ return bottom;
 }
 
 function gsPlotConvexHull() {
-
     var bottom_point = findBottom(my_points);
-
+    window.alert("Bottom point is", bottom_point);
 }
