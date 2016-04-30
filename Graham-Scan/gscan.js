@@ -1,4 +1,3 @@
-
 function getRandomPoints(numPoints) {
 
     var points = new Array();
@@ -13,20 +12,44 @@ function getRandomPoints(numPoints) {
         points.push([x, y]);
     }
 
-    return points
+return points
 }
 
-var points;
+var my_points;
 
 function gsPlotPoints() {
 
     contex = document.getElementById('gs_demo').getContext('2d');
     contex.clearRect(0, 0, 650, 650);
     contex.fillStyle = 'rgb(0,0,0)';
-    points = getRandomPoints(500);
+    my_points = getRandomPoints(5);
+
+    for (var index in my_points) {
+        var point = my_points[index];
+        contex.fillRect(point[0], point[1], 2, 2);
+    }
+}
+
+function findBottom(points) {
+
+    var min_y;
+    var bottom_index;
 
     for (var index in points) {
         var point = points[index];
-        contex.fillRect(point[0], point[1], 2, 2);
+        if (point[1] < min_y || !min_y) {
+            min_y = point[1];
+            bottom_index = index;
+        }
     }
+
+    var bottom = points[bottom_index];
+
+return bottom;
+}
+
+function gsPlotConvexHull() {
+
+    var bottom_point = findBottom(my_points);
+
 }
