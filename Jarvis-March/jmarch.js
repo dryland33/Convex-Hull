@@ -19,14 +19,16 @@ var my_points;
 
 function jmPlotPoints() {
 
-    contex = document.getElementById('jm_demo').getContext('2d');
-    contex.clearRect(0, 0, 650, 650);
-    contex.fillStyle = 'rgb(0,0,0)';
+    context = document.getElementById('jm_demo').getContext('2d');
+    context.clearRect(0, 0, 650, 650);
+    context.fillStyle = '#000000';
+    context.fillRect(0, 0, 650, 650);
+    context.fillStyle = 'rgb(255,255,255)';
     my_points = getRandomPoints(5);
 
     for (var index in my_points) {
         var point = my_points[index];
-        contex.fillRect(point[0], point[1], 2, 2);
+        context.fillRect(point[0], point[1], 2, 2);
     }
 }
 
@@ -50,7 +52,41 @@ function findLeftMost(points) {
 return leftMost;
 }
 
+function smallestRiseToRun(points, left_point) {
+
+    var next_point;
+    var pnt = points[0];
+
+    if (pnt[0] == left_point[0] && pnt[1] == left_point[1]) {
+        var next_point = points[1];
+    } else {
+        next_point = points[0];
+    }
+
+    for (var index in points) {
+        pnt = points[index];
+        if (pnt[0] == left_point[0] && pnt[1] == left_point[1]) {
+            continue;
+        } else {
+            curr_point = points[index];
+
+            var m1 = (next_point[1] - left_point[1]) / (next_point[0] - left_point[0]);
+            var m2 = (curr_point[1] - left_point[1]) / (curr_point[0] - left_point[0]);
+            if (m1 > m2) {
+                next_point = curr_point;
+            }
+        }
+    }
+
+return next_point;
+}
+
 function jmPlotConvexHull() {
     var left_point = findLeftMost(my_points);
-    window.alert("Left point's x value is: " + left_point[0]);
+    var next_point = smallestRiseToRun(my_points, left_point);
+
+    context = document.getElementById('jm_demo').getContext('2d'); 
+    context.fillStyle = 'rgb(255,0,0)';
+    context.fillRect(left_point[0], left_point[1], 2, 2);
+    context.fillRect(next_point[0], next_point[1], 2, 2);
 }
