@@ -12,7 +12,7 @@ function getRandomPoints(numPoints) {
         points.push([x, y]);
     }
 
-return points
+    return points;
 }
 
 var my_points;
@@ -49,7 +49,7 @@ function findLeftMost(points) {
 
     var leftMost = points[left_index];
 
-return leftMost;
+    return leftMost;
 }
 
 function smallestRiseToRun(points, left_point) {
@@ -67,7 +67,8 @@ function smallestRiseToRun(points, left_point) {
         pnt = points[index];
         if (pnt[0] == left_point[0] && pnt[1] == left_point[1]) {
             continue;
-        } else {
+        }
+        else {
             var curr_point = points[index];
 
             var m1 = (next_point[1] - left_point[1]) / (next_point[0] - left_point[0]);
@@ -78,54 +79,59 @@ function smallestRiseToRun(points, left_point) {
         }
     }
 
-return next_point;
+    return next_point;
 }
 
 function turn(pt1, pt2, pt3) {
 
-        var val = (pt2[1] - pt1[1]) * (pt3[0] - pt2[0]) - (pt2[0] - pt1[0]) * (pt3[1] - pt2[1]);
- 
-        var ret;
+    var val = (pt2[1] - pt1[1]) * (pt3[0] - pt2[0]) - (pt2[0] - pt1[0]) * (pt3[1] - pt2[1]);
 
-        //straight
-        if (val == 0)
-            ret = 0;
+    var ret;
+
+    //straight
+    if (val == 0)
+        ret = 0;
         //right
-        else if (val > 0) 
-            ret = 1;
+    else if (val > 0)
+        ret = 1;
         //left
-        else ret = 2;
+    else ret = 2;
 
-return ret;
+    return ret;
 }
 
-function nextSide(points, left_point) {
+function cos_alpha(v1, v2) {
 
-    var next_point;
-    var pnt = points[0];
+    var cosa = (v1[0] * v2[0] + v1[1] * v2[1]) / ((Math.sqrt(v1[0] * v1[0] + v1[1] * v1[1])) * (Math.sqrt(v2[0] * v2[0] + v2[1] * v2[1])));
+    return cosa;
+}
 
-    if (pnt[0] == left_point[0] && pnt[1] == left_point[1]) {
-        var next_point = points[1];
-    } else {
-        next_point = points[0];
-    }
+function nextSide(points, left_point, next_point) {
+
+    var curr_point = points[0];
+    var v1 = [left_point[0] - next_point[0], left_point[1] - next_point[1]];
+
+    var prev_cos = 0;
 
     for (var index in points) {
 
-        if (pnt[0] == point[0] && pnt[1] == point[1]) {
-            continue;
-        } 
-        else {
-            if(dot_product(points[index], point) < dot_product(points[index], next_point)) {
-                next_point = point;
+        curr_point = points[index];
+        //furthest left turn in the next point on the haul
+        var v2 = [next_point[0] - curr_point[0], next_point[1] - curr_point[1]];
+        var curr_cos = cos_alpha(v1, v2);
+        if (curr_cos != 1) {
+            if (prev_cos < curr_cos) {
+                ret_point = curr_point;
+                prev_cos = curr_cos;
             }
         }
     }
 
-return next_point;
+    return ret_point;
 }
 
 function plotSide(side, color) {
+
     var context = document.getElementById('jm_demo').getContext('2d');
     var pt1 = side[0]
     var pt2 = side[1];
@@ -139,16 +145,31 @@ function plotSide(side, color) {
 }
 
 function jmPlotConvexHull() {
-    var left_point = findLeftMost(my_points);
-    var next_point = smallestRiseToRun(my_points, left_point);
 
-    context = document.getElementById('jm_demo').getContext('2d'); 
+    var left_point = findLeftMost(my_points);
+    var initial = left_point;
+    var next_point = smallestRiseToRun(my_points, left_point);
+    var curr_point;
+
+    context = document.getElementById('jm_demo').getContext('2d');
     context.fillStyle = 'rgb(255,0,0)';
     context.fillRect(left_point[0], left_point[1], 2, 2);
     context.fillRect(next_point[0], next_point[1], 2, 2);
 
     var sides = [[left_point, next_point]];
-
     plotSide(sides[0], 'rgb(255,0,0)');
 
+    curr_point = nextSide(my_points, left_point, next_point);
+    sides = [[next_point, curr_point]];
+    plotSide(sides[0], 'rgb(255,0,0)');
+    left_point = next_point;
+    next_point = curr_point;
+
+    while (initial[0] != curr_point[0]) {
+        curr_point = nextSide(my_points, left_point, next_point);
+        sides = [[next_point, curr_point]];
+        setInterval(plotSide(sides[0], 'rgb(255,0,0)'), 2000);
+        left_point = next_point;
+        next_point = curr_point;
+    }
 }
