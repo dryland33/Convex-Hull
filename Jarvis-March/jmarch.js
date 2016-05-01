@@ -24,7 +24,7 @@ function jmPlotPoints() {
     context.fillStyle = '#000000';
     context.fillRect(0, 0, 650, 650);
     context.fillStyle = 'rgb(255,255,255)';
-    my_points = getRandomPoints(5);
+    my_points = getRandomPoints(50);
 
     for (var index in my_points) {
         var point = my_points[index];
@@ -68,7 +68,7 @@ function smallestRiseToRun(points, left_point) {
         if (pnt[0] == left_point[0] && pnt[1] == left_point[1]) {
             continue;
         } else {
-            curr_point = points[index];
+            var curr_point = points[index];
 
             var m1 = (next_point[1] - left_point[1]) / (next_point[0] - left_point[0]);
             var m2 = (curr_point[1] - left_point[1]) / (curr_point[0] - left_point[0]);
@@ -81,6 +81,63 @@ function smallestRiseToRun(points, left_point) {
 return next_point;
 }
 
+function turn(pt1, pt2, pt3) {
+
+        var val = (pt2[1] - pt1[1]) * (pt3[0] - pt2[0]) - (pt2[0] - pt1[0]) * (pt3[1] - pt2[1]);
+ 
+        var ret;
+
+        //straight
+        if (val == 0)
+            ret = 0;
+        //right
+        else if (val > 0) 
+            ret = 1;
+        //left
+        else ret = 2;
+
+return ret;
+}
+
+function nextSide(points, left_point) {
+
+    var next_point;
+    var pnt = points[0];
+
+    if (pnt[0] == left_point[0] && pnt[1] == left_point[1]) {
+        var next_point = points[1];
+    } else {
+        next_point = points[0];
+    }
+
+    for (var index in points) {
+
+        if (pnt[0] == point[0] && pnt[1] == point[1]) {
+            continue;
+        } 
+        else {
+            if(dot_product(points[index], point) < dot_product(points[index], next_point)) {
+                next_point = point;
+            }
+        }
+    }
+
+return next_point;
+}
+
+function plotSide(side, color) {
+    var context = document.getElementById('jm_demo').getContext('2d');
+    var pt1 = side[0]
+    var pt2 = side[1];
+    context.save()
+    context.strokeStyle = color;
+    context.beginPath();
+    context.moveTo(pt1[0], pt1[1]);
+    context.lineTo(pt2[0], pt2[1]);
+    context.stroke();
+    context.restore();
+}
+
 function jmPlotConvexHull() {
     var left_point = findLeftMost(my_points);
     var next_point = smallestRiseToRun(my_points, left_point);
@@ -89,4 +146,9 @@ function jmPlotConvexHull() {
     context.fillStyle = 'rgb(255,0,0)';
     context.fillRect(left_point[0], left_point[1], 2, 2);
     context.fillRect(next_point[0], next_point[1], 2, 2);
+
+    var sides = [[left_point, next_point]];
+
+    plotSide(sides[0], 'rgb(255,0,0)');
+
 }
