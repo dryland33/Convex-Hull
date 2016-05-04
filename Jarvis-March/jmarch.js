@@ -82,24 +82,6 @@ function smallestRiseToRun(points, left_point) {
     return next_point;
 }
 
-function turn(pt1, pt2, pt3) {
-
-    var val = (pt2[1] - pt1[1]) * (pt3[0] - pt2[0]) - (pt2[0] - pt1[0]) * (pt3[1] - pt2[1]);
-
-    var ret;
-
-    //straight
-    if (val == 0)
-        ret = 0;
-        //right
-    else if (val > 0)
-        ret = 1;
-        //left
-    else ret = 2;
-
-    return ret;
-}
-
 function cos_alpha(v1, v2) {
 
     var cosa = (v1[0] * v2[0] + v1[1] * v2[1]) / ((Math.sqrt(v1[0] * v1[0] + v1[1] * v1[1])) * (Math.sqrt(v2[0] * v2[0] + v2[1] * v2[1])));
