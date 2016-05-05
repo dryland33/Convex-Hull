@@ -6,8 +6,11 @@
         <script language="javascript" src="./jmarch.js"></script>
     </head>
     <body  style="background-color: black">
+	    <input type="text" name="input" />
         <button onclick='jmPlotPoints()'>Get Random Points</button>
-        <button onclick='jmPlotConvexHull()'>Get Convex Hull</button><br>
+        <button onclick='jmPlotConvexHull()'>Get Convex Hull</button>
+		<div id="start" style="color:white;"></div>
+		<div id="stop" style="color:white;"></div>
         <canvas id="jm_demo" width=650 height=650></canvas>
     </body>
 </html>
