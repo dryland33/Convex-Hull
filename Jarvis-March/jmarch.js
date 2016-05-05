@@ -19,12 +19,15 @@ var my_points;
 
 function jmPlotPoints() {
 
+    var input = 50;
+	var input = document.getElementsByName("input")[0].value;
+	
     context = document.getElementById('jm_demo').getContext('2d');
     context.clearRect(0, 0, 650, 650);
     context.fillStyle = '#000000';
     context.fillRect(0, 0, 650, 650);
     context.fillStyle = 'rgb(255,255,255)';
-    my_points = getRandomPoints(50);
+    my_points = getRandomPoints(input);
 
     for (var index in my_points) {
         var point = my_points[index];
@@ -107,6 +110,8 @@ function nextSide(points, left_point, next_point) {
                 prev_cos = curr_cos;
             }
         }
+		//sides = [[next_point, curr_point]];
+        //plotSide(sides[0], 'rgb(0,255,0)');
     }
 
     return ret_point;
@@ -126,8 +131,22 @@ function plotSide(side, color) {
     context.restore();
 }
 
-function jmPlotConvexHull() {
+function Begin() {
+    var d = new Date();
+	var s = d.getSeconds();
+    var n = d.getMilliseconds();
+    document.getElementById("start").innerHTML = "start time: " + [ s, n ].join('.');
+}
 
+function End() {
+    var d = new Date();
+	var s = d.getSeconds();
+    var n = d.getMilliseconds();
+    document.getElementById("stop").innerHTML = "end time: " + [ s, n ].join('.');
+}
+
+function jmPlotConvexHull() {
+	Begin();
     var left_point = findLeftMost(my_points);
     var initial = left_point;
     var next_point = smallestRiseToRun(my_points, left_point);
@@ -143,15 +162,17 @@ function jmPlotConvexHull() {
 
     curr_point = nextSide(my_points, left_point, next_point);
     sides = [[next_point, curr_point]];
-    plotSide(sides[0], 'rgb(255,0,0)');
+    plotSide(sides[0], 'rgb(255,0,0) ');
     left_point = next_point;
     next_point = curr_point;
 
     while (initial[0] != curr_point[0]) {
+		//alert(" ");
         curr_point = nextSide(my_points, left_point, next_point);
         sides = [[next_point, curr_point]];
-        setInterval(plotSide(sides[0], 'rgb(255,0,0)'), 2000);
+        plotSide(sides[0], 'rgb(255,0,0)');
         left_point = next_point;
-        next_point = curr_point;
+        next_point = curr_point;	
     }
+	End();
 }
